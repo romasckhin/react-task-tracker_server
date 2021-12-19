@@ -1,28 +1,43 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import styled from "styled-components";
 import Header from "./components/Header";
 import Task from "./components/Task";
 import './App.css'
 import AddTask from "./components/AddTask";
 import Footer from "./components/Footer";
+import axios from "axios";
 
 const App = () => {
 
     const [showTask, setShowTask] = useState(false)
-    const [task, setTask] = useState([
-        {
-            id: 1, title: 'Hahahaha', day: 20, reminder: true
-        },
-        {
-            id: 2, title: 'Hahahaha', day: 20, reminder: true
-        },
-        {
-            id: 3, title: 'Hahahaha', day: 20, reminder: true
-        },
-    ])
+    const [task, setTask] = useState([])
+
+    useEffect(() => {
+
+    axios({
+        method: 'GET',
+        url: `http://localhost:5000/tasks`
+    })
+        .then(res => setTask(res.data))
+        .catch(err => console.log('err Get', err))
+
+    }, [])
 
     const deleteTask = (id) => {
-        setTask(task.filter(el => el.id !== id))
+        axios({
+            method: 'DELETE',
+            url: `http://localhost:5000/tasks/${id}`
+        })
+            .then(res => {
+                axios({
+                    method: 'GET',
+                    url: `http://localhost:5000/tasks`
+                })
+                    .then(res => setTask(res.data))
+                    .catch(err => console.log('err Get', err))
+            })
+            .catch(err => console.log('err Get', err))
+
     }
 
     const toggleReminder = (id) => {

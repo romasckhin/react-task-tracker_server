@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import styled from "styled-components";
+import axios from "axios";
 
 const AddTask = ({task, setTask}) => {
 
@@ -8,18 +9,40 @@ const AddTask = ({task, setTask}) => {
     const [reminder , setReminder] = useState(false)
 
     const addNewTask = () => {
-        const newTask = [...task, {id: Math.random(), title: inputAddTask, day: inputAddDayTimeTask, reminder: reminder}]
 
-        if ( !inputAddTask ) {
-            alert('Please add a task')
-        } else {
-            setTask(newTask)
+        if (!inputAddTask) {
+            alert("Please add a task!")
+            return
         }
+
+        axios({
+            method: 'POST',
+            url: 'http://localhost:5000/tasks/',
+                data: {
+                    id: Math.random(),
+                    title: inputAddTask,
+                    day: inputAddDayTimeTask,
+                    reminder: reminder
+                }
+        })
+            .then(res => {
+                    axios({
+                        method: 'GET',
+                        url: `http://localhost:5000/tasks`
+                    })
+                        .then(res => setTask(res.data))
+                        .catch(err => console.log('err Get', err))
+
+                })
+            .catch(err => console.log('err Get', err))
 
         setInputAddTask('')
         setInputAddDayTimeTask('')
         setReminder(false)
+
+
     }
+
 
     return (
 
@@ -43,7 +66,9 @@ const AddTask = ({task, setTask}) => {
             </Setreminder>
 
             <Button>
+
                 <button onClick={addNewTask}>Save Task</button>
+
             </Button>
 
         </div>

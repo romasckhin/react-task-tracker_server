@@ -39,9 +39,29 @@ const App = () => {
             .catch(err => console.log('err Get', err))
 
     }
+    const [reminder , setReminder] = useState(false)
 
     const toggleReminder = (id) => {
-        setTask(task.map(el => el.id === id ? {...el, reminder: !el.reminder} : el))
+
+      //  setTask(task.map(el => el.id === id ? {...el, reminder: !el.reminder} : el))
+        axios({
+            method: 'PATCH',
+            url: `http://localhost:5000/tasks/${id}`,
+            data: {
+                reminder: !reminder
+            }
+        })
+            .then(res => {
+                console.log(res)
+                axios({
+                    method: 'GET',
+                    url: `http://localhost:5000/tasks`
+                })
+                    .then(res => setTask(res.data))
+                    .catch(err => console.log('err Get', err))
+            })
+            .catch(err => console.log('err Get', err))
+
     }
 
     const show = () => {
@@ -59,6 +79,8 @@ const App = () => {
             />
 
             {showTask && <AddTask
+                reminder={reminder}
+                setReminder={setReminder}
                 task={task}
                 setTask={setTask}
             />}

@@ -2,11 +2,10 @@ import React, {useState} from 'react';
 import styled from "styled-components";
 import axios from "axios";
 
-const AddTask = ({task, setTask}) => {
+const AddTask = ({task, setTask,reminder,setReminder}) => {
 
     const [inputAddTask, setInputAddTask] = useState('')
     const [inputAddDayTimeTask, setInputAddDayTimeTask] = useState('')
-    const [reminder , setReminder] = useState(false)
 
     const addNewTask = () => {
 

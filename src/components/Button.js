@@ -3,8 +3,6 @@ import styled from "styled-components";
 
 const Button = ({show, showTask}) => {
 
-    console.log(showTask)
-
     return (
 
 

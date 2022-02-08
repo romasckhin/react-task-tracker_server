@@ -1,14 +1,19 @@
 import React from 'react';
 import styled from "styled-components";
+import {Link} from "react-router-dom";
 
 const Footer = () => {
     return (
+        <>
 
-        <Container>
+            <Container>
 
-            Task tracker &copy; 2021
+                Task tracker &copy; 2022
 
-        </Container>
+            </Container>
+
+            <Link to='/'> Go back </Link>
+        </>
     );
 };
 

@@ -6,6 +6,7 @@ import './App.css'
 import AddTask from "./components/AddTask";
 import Footer from "./components/Footer";
 import axios from "axios";
+import {Link, Route, Routes} from "react-router-dom";
 
 const App = () => {
 
@@ -14,12 +15,12 @@ const App = () => {
 
     useEffect(() => {
 
-    axios({
-        method: 'GET',
-        url: `http://localhost:5000/tasks`
-    })
-        .then(res => setTask(res.data))
-        .catch(err => console.log('err Get', err))
+        axios({
+            method: 'GET',
+            url: `http://localhost:5000/tasks`
+        })
+            .then(res => setTask(res.data))
+            .catch(err => console.log('err Get', err))
 
     }, [])
 
@@ -39,11 +40,11 @@ const App = () => {
             .catch(err => console.log('err Get', err))
 
     }
-    const [reminder , setReminder] = useState(false)
+    const [reminder, setReminder] = useState(false)
 
     const toggleReminder = (id) => {
 
-      //  setTask(task.map(el => el.id === id ? {...el, reminder: !el.reminder} : el))
+        //  setTask(task.map(el => el.id === id ? {...el, reminder: !el.reminder} : el))
         axios({
             method: 'PATCH',
             url: `http://localhost:5000/tasks/${id}`,
@@ -78,23 +79,35 @@ const App = () => {
                 showTask={showTask}
             />
 
-            {showTask && <AddTask
-                reminder={reminder}
-                setReminder={setReminder}
-                task={task}
-                setTask={setTask}
-            />}
+            <Routes>
+                <Route path='/' element={
+                    <>
+                        {showTask && <AddTask
+                            reminder={reminder}
+                            setReminder={setReminder}
+                            task={task}
+                            setTask={setTask}
+                        />}
 
-            {task.length === 0 ?
-                'No Tasks to Show'
-                :
-                <Task
-                    toggleReminder={toggleReminder}
-                    task={task}
-                    setTask={setTask}
-                    deleteTask={deleteTask}
-                />}
-                <Footer/>
+                        {task.length === 0 ?
+                            'No Tasks to Show'
+                            :
+                            <Task
+                                toggleReminder={toggleReminder}
+                                task={task}
+                                setTask={setTask}
+                                deleteTask={deleteTask}
+                            />}
+                    </>
+                }/>
+
+                <Route path='/footer' element={<Footer/>}/>
+
+            </Routes>
+
+            <FooterStyle>
+                <Link to='/footer'>Footer</Link>
+            </FooterStyle>
         </Container>
     );
 };
@@ -107,5 +120,9 @@ const Container = styled.div`
   border-radius: 15px;
   box-shadow: 2px 2px 2px 2px #d9d6c8;
   padding: 30px;
-
+`
+const FooterStyle = styled.div`
+    display: flex;
+    justify-content: center;
+    text-decoration: none;
 `
